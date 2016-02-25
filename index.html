@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=1024, user-scalable=no">
+
+  <title>NoSQL Injection in Modern Web Applications</title>
+
+  <!-- Required stylesheet -->
+  <link rel="stylesheet" media="screen" href="core/deck.core.css">
+
+  <!-- Extension CSS files go here. Remove or add as needed. -->
+  <link rel="stylesheet" media="screen" href="extensions/goto/deck.goto.css">
+  <link rel="stylesheet" media="screen" href="extensions/menu/deck.menu.css">
+  <!-- <link rel="stylesheet" media="screen" href="extensions/navigation/deck.navigation.css"> -->
+  <link rel="stylesheet" media="screen" href="extensions/status/deck.status.css">
+  <link rel="stylesheet" media="screen" href="extensions/scale/deck.scale.css">
+
+  <!-- Style theme. More available in /themes/style/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="themes/style/east5th.css">
+
+  <!-- Transition theme. More available in /themes/transition/ or create your own. -->
+  <link rel="stylesheet" media="screen" href="themes/transition/horizontal-slide.css">
+
+  <!-- Basic black and white print styles -->
+  <link rel="stylesheet" media="print" href="core/print.css">
+
+  <!-- Required Modernizr file -->
+  <script src="modernizr.custom.js"></script>
+
+  <link rel="icon" type="image/png" href="/img/favicon.png">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/prism.css">
+
+  <script src="/js/prism.js"></script>
+  <script src="/js/jquery.js"></script>
+  <script src="/js/bigtext.js"></script>
+  <script src="/js/typekit.js"></script>
+  <script>
+
+  function show() {
+    $(function() {
+      $('.bigtext').bigtext();
+      $('.content').css('opacity', 1);
+    });
+  }
+
+  try {
+    Typekit.load({
+      async: true,
+      inactive: show,
+      active: show
+    });
+  } catch(e) {
+    show();
+  }</script>
+</head>
+<body>
+  <div class="deck-container">
+
+    <!-- Begin slides. Just make elements with a class of slide. -->
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span>Intro to Meteor</span>
+          <span>Security</span>
+        </div>
+    </section>
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span>Who am I?</span>
+        </div>
+        <img src="http://www.east5th.co/img/east5th.svg" style="margin: 50px auto 0; display: block; -webkit-filter: opacity(75%); height: 100px;">
+    </section>
+
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span>Why Security?</span>
+        </div>
+    </section>
+
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span>The Big Four</span>
+        </div>
+        <h1 class="">Methods</h1>
+        <h1 class="">Publications</h1>
+        <h1 class="">Collection Validators</h1>
+        <h1 class="">Isomorphism</h1>
+    </section>
+
+
+
+
+    <section class="slide">
+        <h1>Methods</h1>
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.methods({
+  removeCart: function(cartId) {
+    Carts.remove({_id: cartId});
+  }
+});
+</code></pre>
+<pre class="language-javascript slide"><code class="language-javascript">
+Meteor.call("removeCart", {$gte: ""});
+</code></pre>
+    </section>
+
+
+
+
+    <section class="slide">
+        <h1>Publications</h1>
+        <div style="position:relative;">
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.publish("users", function(userId) {
+  if (Roles.userIsInRole(userId, "admin")) {
+    return Meteor.users.find({});
+  }
+  return Meteor.users.find({_id: userId}, fields);
+});
+</code></pre>
+        </div>
+<!-- <pre class="language-javascript"><code class="language-javascript"> -->
+<!-- Meteor.publish("users", function(userId) { -->
+<!--   if (Roles.userIsInRole(userId, "admin")) { -->
+<!--     return Meteor.users.find({}); -->
+<!--   } -->
+<!--   return Meteor.users.find({_id: userId}, fields); -->
+<!-- }); -->
+<!-- </code></pre> -->
+<!-- <pre class="language-javascript slide"><code class="language-javascript"> -->
+<!-- Meteor.subscribe("users", {$ne: ""}); -->
+<!-- </code></pre> -->
+<!-- <pre class="language-javascript slide"><code class="language-javascript"> -->
+<!-- Meteor.subscribe("users", {roles: ["admin"]}); -->
+<!-- </code></pre> -->
+    </section>
+
+
+
+
+
+    <section class="slide">
+        <h1>Collection Validators</h1>
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.users.allow({
+  ...
+  update: function(userId, _, _, modifier) {
+    var admin = Roles.userIsInRole(userId, "admin");
+    var settingRoles = modifier.$set &&
+                       modifier.$set.roles;
+    return !admin && settingRoles;
+  }
+});
+</code></pre>
+    </section>
+
+
+
+
+
+    <section class="slide">
+        <h1>Isomorphism</h1>
+<pre class="language-javascript"><code class="language-javascript">
+Meteor.methods({
+  "doSomething": function(input) {
+    if (Meteor.isServer) {
+      if (input === "ABC_Secret_token_DEF")
+        // Trade secrets go here
+    }
+  }
+});
+</code></pre>
+    </section>
+
+
+
+
+
+    <section class="slide">
+        <div class="bigtext">
+          <span>It's Node.js</span>
+          <span>All the way down</span>
+        </div>
+    </section>
+
+
+
+
+    
+    <section class="slide">
+        <div class="bigtext">
+          <span>Questions!</span>
+        </div>
+    </section>
+
+
+
+
+    <!-- <section class="slide"> -->
+    <!--     <div class="bigtext"> -->
+    <!--       <span>How do we fix it?</span> -->
+    <!--     </div> -->
+    <!-- </section> -->
+
+
+
+
+    <!-- <section class="slide"> -->
+    <!--     <div class="bigtext"> -->
+    <!--       <span>Make assertions on</span> -->
+    <!--       <span>user data</span> -->
+    <!--     </div> -->
+<!-- <pre class="language-javascript slide"><code class="language-javascript"> -->
+<!-- check(slug, String); -->
+<!-- </code></pre> -->
+<!-- <pre class="language-bash slide"><code class="language-javascript"> -->
+<!-- Match error: Expected string, got object -->
+<!-- </code></pre> -->
+    <!-- </section> -->
+
+    
+
+
+    <!-- <section class="slide"> -->
+    <!--     <div class="bigtext"> -->
+    <!--       <span>Why pick on Mongo?</span> -->
+    <!--     </div> -->
+    <!--     <img src="https://s3-us-west-1.amazonaws.com/www.1pxsolidtomato.com/mongodb.png" style="max-width: 100%; margin-top: 25px;"> -->
+    <!-- </section> -->
+    
+
+    
+    
+    <!-- <section class="slide"> -->
+    <!--     <div class="bigtext"> -->
+    <!--       <span>What about...</span> -->
+    <!--     </div> -->
+    <!--     <h1 class="slide">Redis?</h1> -->
+    <!--     <h1 class="slide">CouchDB?</h1> -->
+    <!--     <h1 class="slide">RethinkDB?</h1> -->
+    <!--     <h1 class="slide" style="margin-bottom: 0">ORMs?</h1> -->
+    <!-- </section> -->
+
+
+
+
+    <!-- <section class="slide"> -->
+    <!--     <div class="bigtext"> -->
+    <!--       <span>Thanks!</span> -->
+    <!--     </div> -->
+    <!--     <h1 style="line-height: 1.6rem;">check-checker<br/> <span style="font-size:0.5em; font-weight: 100; ">https://github.com/East5th/check-checker/</span></h1> -->
+    <!--     <h1 style="line-height: 1.6rem;">meteor shop<br/><span style="font-size:0.5em; font-weight: 100; ">https://github.com/robconery/meteor-shop</span></h1> -->
+    <!-- </section> -->
+
+
+
+
+
+
+
+
+    <!-- End slides. -->
+
+    <!-- Begin extension snippets. Add or remove as needed. -->
+
+    <!-- deck.navigation snippet -->
+    <!-- <div aria-role="navigation">
+      <a href="#" class="deck-prev-link" title="Previous">&#8592;</a>
+      <a href="#" class="deck-next-link" title="Next">&#8594;</a>
+    </div> -->
+
+    <!-- deck.goto snippet -->
+    <form action="." method="get" class="goto-form">
+      <label for="goto-slide">Go to slide:</label>
+      <input type="text" name="slidenum" id="goto-slide" list="goto-datalist">
+      <datalist id="goto-datalist"></datalist>
+      <input type="submit" value="Go">
+    </form>
+
+    <div class="header">
+      <div class="wrapper">
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="wrapper">
+        <img src="/img/east5th.svg">
+      </div>
+    </div>
+  </div>
+
+<!-- Required JS files. -->
+<script src="core/deck.core.js"></script>
+
+<!-- Extension JS files. Add or remove as needed. -->
+<script src="extensions/menu/deck.menu.js"></script>
+<script src="extensions/goto/deck.goto.js"></script>
+<script src="extensions/status/deck.status.js"></script>
+<script src="extensions/navigation/deck.navigation.js"></script>
+<script src="extensions/scale/deck.scale.js"></script>
+
+<!-- Initialize the deck. You can put this in an external file if desired. -->
+<script>
+  $(function() {
+    $.deck('.slide');
+  });
+</script>
+</body>
+</html>
